@@ -167,7 +167,7 @@ def sql_password(conn):
             conn.execute("INSERT INTO CONTRASENA(hash)"
                          "VALUES (?)", (hash))
 
-def Hashesh():
+def sql_hashesh():
 
     fichero=open('500-worst-passwords.txt')
     df_muestras=pd.DataFrame(conn.execute('SELECT nombre, contrasena, phishing, clicados FROM Usuario'), columns=['nombre','contrasena','phishing','clicados'])
@@ -265,4 +265,4 @@ sql_introducir_datos_user(conn)
 sql_introducir_datos_legal(conn)
 sql_dataframes(conn)
 sql_permisos(conn)
-Hashesh()
+sql_hashesh()
