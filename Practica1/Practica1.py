@@ -3,7 +3,7 @@ import json
 import sqlite3
 import pandas as pd
 import altair as alt
-
+import plotly.graph_objects as go
 
 
 def sql_create_table_user(conn):
@@ -186,20 +186,23 @@ def sql_hashesh():
     df_vulnerable=df_muestras[df_mask]
     df_noVulnerable=df_muestras[df_mask_noVulnerable]
 
-
-
+    print("####### EJERCICIO 4 ####### ")
     #APARTADO 1:
     df_ranking_vulnerable = pd.DataFrame()
     df_ranking_vulnerable = df_vulnerable.nlargest(n=10, columns=['clicados'])
-    #alt.Chart(df_ranking_vulnerable).mark_bar().encode(x='nombre', y='clicados').show()
+    alt.Chart(df_ranking_vulnerable).mark_bar().encode(x='nombre', y='clicados').show()
+
 
     #APARTADO: 2
     df_politicas=pd.DataFrame(conn.execute('SELECT web,cookies, aviso, proteccion_de_datos , creacion FROM Legal'), columns=['web','cookies','aviso','proteccion_de_datos','creacion'])
     df_politicas['politicas_actualizadas']=df_politicas['cookies']+df_politicas['aviso']+df_politicas['proteccion_de_datos']
 
+
     df_ranking_politicas = pd.DataFrame()
     df_ranking_politicas = df_politicas.nsmallest(n=5, columns=['politicas_actualizadas'])
     alt.Chart(df_ranking_politicas).mark_bar().encode(x='web', y='politicas_actualizadas').show()
+    
+
 
     #APARTADO: 3
     df_fechas = pd.DataFrame(conn.execute('SELECT  usuario ,count(fecha) FROM Fechas GROUP BY usuario'),
@@ -220,11 +223,14 @@ def sql_hashesh():
 
     df_resultados=pd.DataFrame()
     df_resultados['media']=df_compararConexiones.mean()
-    print("####### EJERCICIO 4 ####### ")
-    print("Apartado c:")
-    print(df_resultados)
-    #alt.Chart(df_compararConexiones).mark_bar().encode(x='tipo', y='media').show()
 
+    fig = go.Figure(
+        data=[go.Bar(
+            y=[df_resultados.iat[0,0],df_resultados.iat[1,0]],
+            x=['Media usuarios vulnerable','Media usuarios no vulnerables'])],
+        layout_title_text="Conexiones y contraseñas"
+    )
+    fig.show()
 
     #APARTADO: 4
     #print(df_vulnerable)
@@ -234,9 +240,11 @@ def sql_hashesh():
     ##df_creacion['creacion']=df_creacion[df_mask_3]
     ##df_creacion['creacion'] = df_creacion[df_mask_0]
 
+
     df_mask_3=df_politicas[df_politicas['politicas_actualizadas']==3]
     df_mask_0=df_politicas[df_politicas['politicas_actualizadas']<3]
     df_aux=df_mask_0.groupby(['creacion']).count()
+    print("Apartado 4:")
     #print(df_mask_3.groupby(['creacion']).count())
     #print(df_aux)
 
@@ -247,8 +255,17 @@ def sql_hashesh():
     df_comparacion['ContrasenasComprometidas']=df_vulnerable.apply(len)
     df_comparacion['ContrasenasNOComprometidas']=df_noVulnerable.apply(len)
     df_comparacion = df_comparacion.drop(['nombre','vulnerable','phishing','clicados'], axis=0)
+    df_comparacion['contrasena']=df_comparacion['ContrasenasComprometidas']+df_comparacion['ContrasenasNOComprometidas']
     print("\nApartado e:")
     print(df_comparacion)
+
+
+    fig = go.Figure(
+        data=[go.Bar(y=[df_comparacion['ContrasenasComprometidas'].sum(),df_comparacion['ContrasenasNOComprometidas'].sum()],
+                     x=['Contraseñas comprometidas','Contraseñas no comprometidas'])],
+        layout_title_text="Contraseñas compromteidas vs No comprometidas"
+    )
+    fig.show()
     print("####### FIN EJERCICIO 4 ####### ")
 
 
