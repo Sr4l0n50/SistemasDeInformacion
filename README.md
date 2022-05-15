@@ -8,7 +8,7 @@ Toda la información en :
 
 ## Práctica 2: Representacion de los datos
 Toda la información en :
-[README.md](https://github.com/Sr4l0n50/SistemasDeInformacion/tree/main/Practica2)
+[README.md](https://github.com/Sr4l0n50/SistemasDeInformacion/blob/main/Practica%202/README.md)
 
 
 
