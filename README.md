@@ -6,6 +6,11 @@ _Resumen y documentos de las prácticas realizadas en la asignatura_
 Toda la información en :
 [README.md](https://github.com/Sr4l0n50/SistemasDeInformacion/tree/main/Practica1)
 
+## Práctica 2: Representacion de los datos
+Toda la información en :
+[README.md](https://github.com/Sr4l0n50/SistemasDeInformacion/tree/main/Practica 2)
+
+
 
 ## Autores ✒️
 
